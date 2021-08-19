@@ -1,0 +1,9 @@
+{
+    "arduino.enableUSBDetection": true,
+    "arduino.defaultBaudRate": 9600,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "[glsl]": {
+      "editor.defaultFormatter": "xaver.clang-format"
+    },
+    "editor.formatOnSave": true
+  }
