@@ -5,7 +5,11 @@ import GlobalStyle from "./global.styles";
 const IndexPage = () => (
   <>
     <GlobalStyle />
-    <Scene />
+    {typeof window !== `undefined` && <React.Suspense fallback={null}>
+      <Scene />
+    </React.Suspense>
+    }
+
   </>
 )
 

@@ -1,0 +1,16 @@
+
+
+// export const AMOUNT_OF_TIME_LOADING_SPINNER = 5000
+// export const START_ANIMATION = 6000;
+// export const END_ANIMATION = 6200;
+
+// export const LOADING_BAR_ANIMATION_FADE_OUT_LENGTH = '1s';
+
+
+export const AMOUNT_OF_TIME_LOADING_SPINNER = 1000
+export const START_ANIMATION = 3000;
+export const END_ANIMATION = 2000;
+
+export const LOADING_BAR_ANIMATION_FADE_OUT_LENGTH = '1s';
+
+
