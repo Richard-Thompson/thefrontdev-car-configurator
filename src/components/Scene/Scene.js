@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState, useRef } from 'react';
 import { Html, useProgress } from '@react-three/drei';
 import { extend } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -6,7 +6,8 @@ import {
     Canvas,
     CinematicHalfScreen,
     LoadingScreen,
-    LoadingBar
+    LoadingBar,
+    Button,
 } from './Scene.styles';
 import Effects from '../Effects/Postprocessing';
 import CarModel from '../CarModel/Car';
@@ -14,45 +15,86 @@ import { Overlay } from '../Overlay/Overlay';
 import { Controls } from '../controls/controls';
 import { useAnimationControls } from '../../Context/animationControls';
 import {
-    AMOUNT_OF_TIME_LOADING_SPINNER,
-    START_ANIMATION
+    AMOUNT_OF_TIME_LOADING_SCREEN,
+    START_ANIMATION,
+    START_CAMERA_POSITION,
+    END_CAMERA_POSITION
 } from '../../constants';
+import { useControls } from '../../Context/controlsContext';
+import { useSpring } from '@react-spring/core';
 
 export const Scene = () => {
-    const { endOfLoading, setEndOfLoading } = useAnimationControls(state => ({
-        endOfLoading: state.endOfLoading,
-        setEndOfLoading: state.setEndOfLoading
+    const {
+        setControlsRef
+    } = useControls(state => ({
+        setControlsRef: state.setControlsRef
     }))
-    const { endOfAnimation, startOfAnimation, setStartOfAnimation } = useAnimationControls(state => ({
+    const {
+        startOfAnimation,
+        endOfAnimation,
+        setStartOfAnimation,
+        setIsPlayingIntroSong,
+        endOfLoading,
+        setEndOfLoading,
+        setBrightnessValue,
+    } = useAnimationControls(state => ({
         setStartOfAnimation: state.setStartOfAnimation,
         startOfAnimation: state.startOfAnimation,
         endOfAnimation: state.endOfAnimation,
+        setIsPlayingIntroSong: state.setIsPlayingIntroSong,
+        endOfLoading: state.endOfLoading,
+        setEndOfLoading: state.setEndOfLoading,
+        setBrightnessValue: state.setBrightnessValue
     }))
-    const {
-        active,
-        progress,
-        errors,
-        item,
-        loaded,
-        total
-    } = useProgress();
+    const [controls, setControls] = useState(null);
+    const [personEntered, setPersonEntered] = useState(false)
+    const { progress } = useProgress();
+    const background = useRef(null);
+    const postProBrightValue = useRef(null);
 
     useEffect(() => {
-        if (progress >= 100) {
+        setControlsRef(controls)
+    }, [controls])
+
+    useEffect(() => {
+        if (progress >= 100 && personEntered) {
 
             setTimeout(() => {
                 setEndOfLoading(true);
-                console.log({ timeout: true })
-            }, AMOUNT_OF_TIME_LOADING_SPINNER);
+            }, AMOUNT_OF_TIME_LOADING_SCREEN);
 
             setTimeout(() => {
                 setStartOfAnimation(true);
-                console.log({ timeout: true })
+                setIsPlayingIntroSong(true)
             }, START_ANIMATION)
         }
-    }, [progress])
+    }, [progress, personEntered])
 
+    useEffect(() => {
+        postProBrightValue.current = 0.1;
+        setBrightnessValue(postProBrightValue);
+        // console.log({ background })
+        // if (endOfAnimation) {
+        //     setTransitionEndColor(true);
+        // }
+    }, []);
 
+    useSpring({
+        config: { duration: 4000, clamp: true },
+        percentage: endOfAnimation ? 1 : 0,
+        onChange: ({ value: { percentage } }) => {
+            // console.log(percentage)
+
+            postProBrightValue.current = (0.9 - 0.1) * percentage;
+
+            if (background?.current) {
+                const color = new THREE.Color('white');
+                const startColor = new THREE.Color('#161616');
+                background.current.copy(startColor).lerp(color, percentage)
+            }
+            // console.log({ bg: background })
+        }
+    })
     return (
         <>
             {progress !== 100 && (
@@ -60,25 +102,28 @@ export const Scene = () => {
             )}
             <Canvas
                 shadows
-                onCreated={(gl) => {
-                    console.log({ gl })
-                    const renderer = gl.gl;
-                    const height = window.innerHeight;
-                    const width = window.innerWidth;
-                    // let pixelRatio = window.devicePixelRatio || 0;
-                    // // let pixelRatio = window.devicePixelRatio || 0;
-                    renderer.setSize(width, height);
-                    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                gl={{ antialias: true }}
+                onCreated={({ gl }) => {
+                    gl.shadowMap.type = THREE.PCFSoftShadowMap;
+                    gl.antiAlias = true;
+                    gl.setPixelRatio(2.0)
+                    gl.setSize(window.innerWidth, window.innerHeight);
+                    // gl.setPixelRatio(2)
                 }}
                 camera={{
-                    position: [0, 1.0, 5.0],
+                    position:
+                        [
+                            END_CAMERA_POSITION.x,
+                            END_CAMERA_POSITION.y,
+                            END_CAMERA_POSITION.z
+                        ]
                 }}
             >
-
-                <color attach="background" args={["white"]} roughness={1.0} />
+                <Controls setControls={setControls} />
+                {/* <color attach="background" args={["black"]} roughness={1.0} /> */}
                 <gridHelper args={[10, 10]} />
                 <Suspense fallback={null}>
-                    <color attach="background" args={["black"]} />
+                    <color ref={background} attach="background" args={["#161616"]} />
 
                     <ambientLight layers={2} intensity={20} color="white" />
                     <directionalLight
@@ -101,16 +146,29 @@ export const Scene = () => {
                 </Suspense>
             </Canvas >
             <>
+                {progress >= 100 &&
+                    <Button
+                        fadeOut={personEntered}
+                        onClick={() => {
+                            setPersonEntered(true)
+                        }}
+                    >
+                        Enter Configurator
+                    </Button>
+                }
+                {personEntered &&
+                    <LoadingBar className="ripple">
+                        <div className={`${endOfLoading && 'fade-out'}`}></div>
+                        <div className={`${endOfLoading && 'fade-out'}`}></div>
+                    </LoadingBar>
+                }
                 <CinematicHalfScreen
                     top
                     endOfAnimation={endOfAnimation}
                     startOfAnimation={startOfAnimation}
                 >
+
                 </CinematicHalfScreen>
-                <LoadingBar className="ripple">
-                    <div className={`${endOfLoading && 'fade-out'}`}></div>
-                    <div className={`${endOfLoading && 'fade-out'}`}></div>
-                </LoadingBar>
                 <CinematicHalfScreen
                     top={false}
                     endOfAnimation={endOfAnimation}

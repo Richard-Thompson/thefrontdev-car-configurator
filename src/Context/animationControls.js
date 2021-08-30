@@ -10,7 +10,10 @@ export const useAnimationControls = create(set => ({
     endOfAnimation: false,
     setEndOfAnimation: (state) =>
         set({ endOfAnimation: state }),
-    aniGroup: null,
-    setAniGroup: (state) =>
-        set({ aniGroup: state }),
+    isPlayingIntroSong: false,
+    setIsPlayingIntroSong: (state) =>
+        set({ isPlayingIntroSong: state }),
+    brightnessValue: null,
+    setBrightnessValue: (state) =>
+        set({ brightnessValue: state })
 }))

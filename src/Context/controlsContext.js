@@ -26,5 +26,8 @@ export const useControls = create(set => ({
         set({ nodes: state }),
     bloomRefSet: false,
     setBloomRef: (state) =>
-        set({ bloomRefSet: state })
+        set({ bloomRefSet: state }),
+    controlsRef: null,
+    setControlsRef: (state) =>
+        set({ controlsRef: state }),
 }));
