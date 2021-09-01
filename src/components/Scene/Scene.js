@@ -20,15 +20,9 @@ import {
     START_CAMERA_POSITION,
     END_CAMERA_POSITION
 } from '../../constants';
-import { useControls } from '../../Context/controlsContext';
 import { useSpring } from '@react-spring/core';
 
 export const Scene = () => {
-    const {
-        setControlsRef
-    } = useControls(state => ({
-        setControlsRef: state.setControlsRef
-    }))
     const {
         startOfAnimation,
         endOfAnimation,
@@ -46,15 +40,10 @@ export const Scene = () => {
         setEndOfLoading: state.setEndOfLoading,
         setBrightnessValue: state.setBrightnessValue
     }))
-    const [controls, setControls] = useState(null);
     const [personEntered, setPersonEntered] = useState(false)
     const { progress } = useProgress();
     const background = useRef(null);
     const postProBrightValue = useRef(null);
-
-    useEffect(() => {
-        setControlsRef(controls)
-    }, [controls])
 
     useEffect(() => {
         if (progress >= 100 && personEntered) {
@@ -119,7 +108,7 @@ export const Scene = () => {
                         ]
                 }}
             >
-                <Controls setControls={setControls} />
+                <Controls />
                 {/* <color attach="background" args={["black"]} roughness={1.0} /> */}
                 <gridHelper args={[10, 10]} />
                 <Suspense fallback={null}>

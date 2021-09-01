@@ -48,7 +48,6 @@ const Effects = ({ children }) => {
     );
 
     const bloomComposer = new EffectComposer(gl);
-    bloomComposer.renderTarget2.minFilter = THREE.LinearFilter;
     bloomComposer.renderToScreen = false;
     bloomComposer.setSize(size.width, size.height);
     bloomComposer.addPass(renderScene);

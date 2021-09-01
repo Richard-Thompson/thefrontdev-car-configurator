@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useThree, extend } from '@react-three/fiber';
+import { useControls } from '../../Context/controlsContext';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { useAnimationControls } from '../../Context/animationControls';
 import { END_CAMERA_POSITION } from '../../constants';
@@ -8,7 +9,13 @@ extend({ OrbitControls })
 
 export const Controls = () => {
     const { camera, gl } = useThree();
-    const controls = useRef(null);
+    const [controls, setControls] = useState(null);
+
+    const {
+        setControlsRef
+    } = useControls(state => ({
+        setControlsRef: state.setControlsRef
+    }))
 
     const { startOfAnimation, endOfAnimation } = useAnimationControls((state) => ({
         startOfAnimation: state.startOfAnimation,
@@ -16,28 +23,24 @@ export const Controls = () => {
     }))
 
     useEffect(() => {
-
+        setControlsRef(controls)
         console.log({ controls })
-    }, [])
+    }, [controls])
 
     useEffect(() => {
+        console.log({ controls })
+        if (startOfAnimation) {
+            controls.enabled = false;
+        }
         if (endOfAnimation) {
-            console.log({ finished: controls })
-            controls.current.enabled = true
-            controls.current.enabled = true;
-            //   controls.current.minPolarAngle = POLAR_ANGLE;
-            //   controls.current.maxPolarAngle = POLAR_ANGLE;
-            //   controls.current.minAzimuthAngle = MIN_ROTATION_ANGLE;
-            //   controls.current.maxAzimuthAngle = MAX_ROTATION_ANGLE;
-            controls.current.enableZoom = true;
-        } else {
-            controls.current.enabled = false;
+            console.log('ended')
+            controls.enabled = true;
         }
     }, [startOfAnimation, endOfAnimation])
 
     return <orbitControls
         layers={1}
-        ref={controls}
+        ref={setControls}
         args={[camera, gl.domElement]}
 
     />;
