@@ -1,9 +1,10 @@
 {
-    "arduino.enableUSBDetection": true,
-    "arduino.defaultBaudRate": 9600,
-    "diffEditor.ignoreTrimWhitespace": false,
-    "[glsl]": {
-      "editor.defaultFormatter": "xaver.clang-format"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": false,
+    "eslint.validate": ["javascript", "javascriptreact", "vue", "typescript", "typescriptreact"],
+    "json.format.enable": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
     },
-    "editor.formatOnSave": true
-  }
+    "editor.detectIndentation": false
+}
