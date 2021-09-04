@@ -7,7 +7,7 @@ import {
   LoadingScreen,
   LoadingBar,
   Button,
-} from 'components/molecules/canvas/canvas.styles';
+} from 'components/organisms/canvas/canvas.styles';
 import { Overlay } from 'components/organisms/Overlay/Overlay';
 import { useAnimationControls } from 'context/animationControls';
 import {
@@ -15,7 +15,7 @@ import {
   START_ANIMATION,
   END_CAMERA_POSITION,
 } from 'components/utility/constants';
-import { Scene } from 'components/molecules/scene/Scene';
+import { Scene } from 'components/organisms/scene/Scene';
 
 export const CanvasRoot = () => {
   const {
