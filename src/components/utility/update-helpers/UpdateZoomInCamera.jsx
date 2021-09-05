@@ -18,8 +18,7 @@ export const UpdateZoomInCamera = ({ nodes }) => {
   );
   const { camera } = useThree();
   const [initialPosition, setInitialPosition] = useState(camera.position);
-  // const [initialTarget] = useMemo(() => [controlsRef?.target],
-  //   []);
+  const [initialTarget, setInitialTarget] = useState(controlsRef?.target);
 
   useEffect(() => {
     if (nodes) {
@@ -29,6 +28,7 @@ export const UpdateZoomInCamera = ({ nodes }) => {
     function onPositionChange() {
       if (controlsRef.enabled) {
         setInitialPosition(camera.position);
+        setInitialTarget(controlsRef.target);
       }
     }
 
@@ -55,7 +55,13 @@ export const UpdateZoomInCamera = ({ nodes }) => {
         let endScaled = new THREE.Vector3(endCloned.x, endCloned.y, endCloned.z);
         endScaled = endScaled.multiplyScalar(0.01);
 
-        camera.lookAt(endScaled);
+        const lerpedLookAt = new THREE.Vector3();
+        // console.log({ initialTarget, endScaled });
+        const per = Math.min(percentage * 1.3, 1.0);
+        console.log({ per });
+        lerpedLookAt.lerpVectors(initialTarget, endScaled, per);
+
+        camera.lookAt(lerpedLookAt);
         endScaled.x = endScaled.x + endScaled.x + endScaled.x + endScaled.x;
         // endScaled.z = endScaled.z + endScaled.z;
 
@@ -71,6 +77,7 @@ export const UpdateZoomInCamera = ({ nodes }) => {
     onStart: () => {},
     onRest: () => {
       // console.log({ nodes })
+      setInitialTarget(controlsRef?.target);
       // nodes[activeObjectName].scale = new THREE.Vector3(0.01, 0.01, 0.01)
       const end = nodes[activeObjectName].position;
 
