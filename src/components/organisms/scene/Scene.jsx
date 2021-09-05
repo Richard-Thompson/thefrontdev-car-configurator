@@ -4,7 +4,10 @@ import CarModel from 'components/organisms/car-model/Car';
 import { Controls } from 'components/atoms/controls/controls';
 import { Background } from 'components/atoms/background/Background';
 import { Lights } from 'components/molecules/lights/Lights';
-import { UpdateBrightness } from '../../utility/spring-helpers/UpdateBrightness';
+import { UpdateBrightness } from 'components/utility/update-helpers/UpdateBrightness';
+import { UpdateIntroCamera } from 'components/utility/update-helpers/UpdateIntroCamera';
+import { UpdateZoomInCamera } from 'components/utility/update-helpers/UpdateZoomInCamera';
+import { PlayAudio } from 'components/utility/update-helpers/PlayAudio';
 
 export const Scene = () => (
   <>
@@ -18,7 +21,15 @@ export const Scene = () => (
 
       <Lights />
 
-      <CarModel />
+      <CarModel>
+        {(props) => (
+          <>
+            <UpdateIntroCamera {...props} />
+            <UpdateZoomInCamera {...props} />
+            <PlayAudio {...props} />
+          </>
+        )}
+      </CarModel>
       <Effects />
     </Suspense>
   </>
