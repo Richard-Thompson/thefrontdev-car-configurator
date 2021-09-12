@@ -11,7 +11,7 @@ export const Canvas = styled(Can)`
 `;
 
 export const CinematicHalfScreen = styled.div`
-    ${({ top, startOfAnimation }) => `
+    ${({ top, startOfAnimation, endOfAnimation }) => `
         position: fixed;
         z-index: 11;
         top: ${top ? 0 : 'unset'};
@@ -23,11 +23,22 @@ export const CinematicHalfScreen = styled.div`
         ${
   startOfAnimation
     ? `
-        animation: ${
+								animation: ${
   top ? 'animateTop' : 'animateBottom'
 } ${AMOUNT_OF_TIME_LOADING_SCREEN_TRANSITION}ms linear;
-        animation-fill-mode: forwards;
-        `
+								animation-fill-mode: forwards;
+								`
+    : ''
+}
+
+				${
+  endOfAnimation
+    ? `
+								animation: ${
+  top ? 'endAnimateTop' : 'endAnimateBottom'
+} ${AMOUNT_OF_TIME_LOADING_SCREEN_TRANSITION}ms linear;
+								animation-fill-mode: forwards;
+								`
     : ''
 }
 
@@ -41,14 +52,10 @@ export const CinematicHalfScreen = styled.div`
             100% { top: -45% }
         }
 
-        // @keyframes endAnimateTop {
-        //     0% { top: -95% }
-        //     99% { top: -99% }
-        //     100% { 
-        //         top: -100%;
-                
-        //     }
-        // }
+        @keyframes endAnimateTop {
+            0% { top: -45% }
+            100% { top: -50% }
+        }
         @keyframes animateBottom {
             0% { bottom: 0 }
             10% { bottom: - 10% }
@@ -59,13 +66,10 @@ export const CinematicHalfScreen = styled.div`
             100% { bottom: -45% }
         }
 
-        // @keyframes endAnimateBottom {
-        //     0% { bottom: -95% }
-        //     99% { bottom: -99% }
-        //     100% { 
-        //         top: -100%;
-        //      }
-        // }
+				@keyframes endAnimateBottom {
+            0% { top: -45% }
+            100% { top: -50% }
+        }
     `}
 `;
 

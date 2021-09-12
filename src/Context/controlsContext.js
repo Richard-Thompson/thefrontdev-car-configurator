@@ -21,4 +21,6 @@ export const useControls = create((set) => ({
   setBloomRef: (state) => set({ bloomRefSet: state }),
   controlsRef: null,
   setControlsRef: (state) => set({ controlsRef: state }),
+  activeColor: null,
+  setActiveColor: (state) => set({ activeColor: state }),
 }));

@@ -8,6 +8,7 @@ import { UpdateBrightness } from 'components/utility/update-helpers/UpdateBright
 import { UpdateIntroCamera } from 'components/utility/update-helpers/UpdateIntroCamera';
 import { UpdateZoomInCamera } from 'components/utility/update-helpers/UpdateZoomInCamera';
 import { PlayAudio } from 'components/utility/update-helpers/PlayAudio';
+import { UpdateCarColor } from 'components/utility/update-helpers/UpdateCarColor';
 
 export const Scene = () => (
   <>
@@ -27,6 +28,7 @@ export const Scene = () => (
             <UpdateIntroCamera {...props} />
             <UpdateZoomInCamera {...props} />
             <PlayAudio {...props} />
+            <UpdateCarColor {...props} />
           </>
         )}
       </CarModel>

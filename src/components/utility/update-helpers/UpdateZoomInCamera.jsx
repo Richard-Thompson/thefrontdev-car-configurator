@@ -2,35 +2,40 @@ import { useEffect, useState } from 'react';
 import { useThree } from '@react-three/fiber';
 import { useSpring } from '@react-spring/three';
 import * as THREE from 'three';
+import { END_CAMERA_POSITION } from 'components/utility/constants';
 import { useControls } from '../../../context/controlsContext';
 
-export const UpdateZoomInCamera = ({ nodes }) => {
+export const UpdateZoomInCamera = ({ nodes: initialNodes }) => {
+  const [nodes] = useState(() => {
+    const tempNodes = initialNodes;
+    tempNodes.frontView = { position: END_CAMERA_POSITION };
+
+    return tempNodes;
+  });
   const {
-    activeObject, setActiveObject, activeObjectName, setNodes, controlsRef,
-  } = useControls(
-    (state) => ({
-      setActiveObject: state.setActiveObject,
-      activeObject: state.activeObject,
-      activeObjectName: state.activeObjectName,
-      setNodes: state.setNodes,
-      controlsRef: state.controlsRef,
-    }),
-  );
+    activeObject,
+    setActiveObject,
+    activeObjectName,
+    setActiveObjectName,
+    setNodes,
+    controlsRef,
+  } = useControls((state) => ({
+    setActiveObject: state.setActiveObject,
+    activeObject: state.activeObject,
+    activeObjectName: state.activeObjectName,
+    setActiveObjectName: state.setActiveObjectName,
+    setNodes: state.setNodes,
+    controlsRef: state.controlsRef,
+  }));
   const { camera } = useThree();
-  const [initialPosition, setInitialPosition] = useState(camera.position);
-  const [initialTarget, setInitialTarget] = useState(controlsRef?.target);
+  const [vectorLookAt] = useState(() => new THREE.Vector3());
 
   useEffect(() => {
     if (nodes) {
       setNodes(nodes);
     }
 
-    function onPositionChange() {
-      if (controlsRef.enabled) {
-        setInitialPosition(camera.position);
-        setInitialTarget(controlsRef.target);
-      }
-    }
+    function onPositionChange() {}
 
     if (controlsRef) {
       controlsRef.addEventListener('change', onPositionChange);
@@ -38,57 +43,40 @@ export const UpdateZoomInCamera = ({ nodes }) => {
   }, []);
 
   useSpring({
-    config: { duration: activeObject ? 2000 : 0, clamp: true, precision: 1 },
+    config: { duration: activeObject ? 2000 : 0, clamp: true },
     percentage: activeObject ? 1 : 0,
     onChange: ({ value: { percentage } }) => {
       if (percentage > 0 && controlsRef) {
-        // percentage = Math.round(percent)
-        controlsRef.enabled = false;
-        const start = initialPosition;
-        // console.log({ initialPosition })
-        console.log({ percentage });
-        // nodes[activeObjectName].scale = new THREE.Vector3(0.01, 0.01, 0.01)
-        const end = nodes[activeObjectName].position;
+        if (activeObjectName !== 'frontView') {
+          controlsRef.enabled = false;
+          const end = nodes[activeObjectName].position;
 
-        // console.log({ end })
-        const endCloned = end;
-        let endScaled = new THREE.Vector3(endCloned.x, endCloned.y, endCloned.z);
-        endScaled = endScaled.multiplyScalar(0.01);
+          const endCloned = end;
+          let endScaled = new THREE.Vector3(endCloned.x, endCloned.y, endCloned.z);
+          endScaled = endScaled.multiplyScalar(0.01);
 
-        const lerpedLookAt = new THREE.Vector3();
-        // console.log({ initialTarget, endScaled });
-        const per = Math.min(percentage * 1.3, 1.0);
-        console.log({ per });
-        lerpedLookAt.lerpVectors(initialTarget, endScaled, per);
-
-        camera.lookAt(lerpedLookAt);
-        endScaled.x = endScaled.x + endScaled.x + endScaled.x + endScaled.x;
-        // endScaled.z = endScaled.z + endScaled.z;
-
-        const scalarVector = endScaled;
-
-        const lerpedVector = new THREE.Vector3();
-        lerpedVector.lerpVectors(start, scalarVector, percentage / 10);
-        camera.position.z = lerpedVector.z;
-        camera.position.x = lerpedVector.x;
-        camera.position.y = lerpedVector.y;
+          camera.lookAt(vectorLookAt.lerp(endScaled, 0.05));
+          endScaled.x = endScaled.x + endScaled.x + endScaled.x + endScaled.x;
+          camera.position.lerp(endScaled, 0.05);
+        } else {
+          camera.lookAt(vectorLookAt.lerp(new THREE.Vector3(0, 0, 0), 0.05));
+          const end = nodes[activeObjectName].position;
+          camera.position.lerp(end, 0.05);
+        }
       }
     },
     onStart: () => {},
     onRest: () => {
-      // console.log({ nodes })
-      setInitialTarget(controlsRef?.target);
-      // nodes[activeObjectName].scale = new THREE.Vector3(0.01, 0.01, 0.01)
-      const end = nodes[activeObjectName].position;
+      // const end = nodes[activeObjectName].position;
 
-      // console.log({ end })
-      const endCloned = end;
-      let endScaled = new THREE.Vector3(endCloned.x, endCloned.y, endCloned.z);
-      endScaled = endScaled.multiplyScalar(0.01);
+      // const endCloned = end;
+      // let endScaled = new THREE.Vector3(endCloned.x, endCloned.y, endCloned.z);
+      // endScaled = endScaled.multiplyScalar(0.01);
 
-      controlsRef.enabled = true;
-      controlsRef.target = endScaled;
+      // controlsRef.enabled = true;
+      // controlsRef.target = endScaled;
       setActiveObject(false);
+      setActiveObjectName(null);
     },
   });
   return null;

@@ -8,7 +8,7 @@ import {
   LoadingBar,
   Button,
 } from 'components/organisms/canvas/canvas.styles';
-import { Overlay } from 'components/organisms/Overlay/Overlay';
+import { Overlay } from 'components/organisms/overlay/Overlay';
 import { useAnimationControls } from 'context/animationControls';
 import {
   AMOUNT_OF_TIME_LOADING_SCREEN,
@@ -98,7 +98,7 @@ export const CanvasRoot = () => {
           startOfAnimation={startOfAnimation}
         />
       </>
-      <Overlay />
+      {endOfAnimation ? <Overlay /> : null}
     </>
   );
 };

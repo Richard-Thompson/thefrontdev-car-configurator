@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useAnimationControls } from 'context/animationControls';
 import { PositionalAudio } from './PositionalAudio';
 
@@ -6,10 +6,6 @@ export const CarIntroAudio = () => {
   const { isPlayingIntroSong } = useAnimationControls((state) => ({
     isPlayingIntroSong: state.isPlayingIntroSong,
   }));
-
-  useEffect(() => {
-    console.log({ isPlayingIntroSong });
-  }, []);
 
   return (
     <PositionalAudio

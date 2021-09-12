@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useControls } from 'context/controlsContext';
 import { PositionalAudio } from './PositionalAudio';
 
@@ -8,12 +8,12 @@ export const CarAudio = () => {
   }));
 
   return (
-    soundOn && (
+    <Suspense fallback={null}>
       <PositionalAudio
         key={1}
         url="/car/audio/010567704-sfx-car-idling-1-ear.wav"
-        soundPlaying
+        soundPlaying={soundOn}
       />
-    )
+    </Suspense>
   );
 };

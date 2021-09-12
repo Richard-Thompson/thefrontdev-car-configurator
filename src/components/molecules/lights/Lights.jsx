@@ -5,11 +5,12 @@ import { DirectionalLight } from 'components/atoms/directional-light/Directional
 export const Lights = () => (
   <>
     <AmbientLight layers={2} intensity={20} color="white" />
+    <AmbientLight layers={1} intensity={2} color="white" />
     <DirectionalLight
       layers={1}
       castShadow
       position={[2.5, 8, 5]}
-      intensity={5.5}
+      intensity={1.4}
       shadow-mapSize-width={1024}
       shadow-mapSize-height={1024}
       shadow-camera-far={50}

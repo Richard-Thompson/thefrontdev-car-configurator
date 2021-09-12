@@ -84,12 +84,10 @@ const Effects = () => {
     bloomComposer.render();
     camera.layers.set(1);
     finalComposer.render();
-    // console.log({ brightnessValue: brightnessValue.current })
+
     if (endOfAnimation && brightnessValue?.current) {
       finalComposer.passes[1].material.uniforms.darkFactor.value = brightnessValue.current;
     }
-
-    // console.log({ finalComposer })
   }, 9);
 
   return null;

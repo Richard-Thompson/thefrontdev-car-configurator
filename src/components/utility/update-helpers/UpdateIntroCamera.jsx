@@ -32,7 +32,6 @@ export const UpdateIntroCamera = ({
       camPosAction.setDuration(CINEMATIC_DURATION).setLoop(THREE.LoopOnce, 0).play();
       mixer.addEventListener('finished', () => {
         setEndOfAnimation(true);
-        console.log({ finished: true });
 
         const { x, y, z } = END_CAMERA_POSITION;
 
@@ -55,7 +54,6 @@ export const UpdateIntroCamera = ({
       if (controlsRef?.current) {
         controlsRef.current.update();
       }
-      // console.log({ x, y, z, camera })
     }
   });
 
