@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useThree } from '@react-three/fiber';
-import { playAudio } from '../../utils';
+import * as THREE from 'three';
 import { useAnimationControls } from '../../../context/animationControls';
 
 export const PlayAudio = () => {
@@ -9,14 +9,32 @@ export const PlayAudio = () => {
   }));
   const { camera } = useThree();
 
+  const [soundObj] = useMemo(() => {
+    const listener = new THREE.AudioListener();
+    camera.add(listener);
+
+    // create a global audio source
+    const sound = new THREE.Audio(listener);
+
+    // load a sound and set it as the Audio object's buffer
+    const audioLoader = new THREE.AudioLoader();
+    audioLoader.load(
+      '/car/audio/runaway-oakvale-of-albion-main-version-03-13-3073-timestrech.wav',
+      (buffer) => {
+        sound.setBuffer(buffer);
+        // sound.
+        sound.setLoop(false);
+        sound.setVolume(1.0);
+      },
+    );
+    return [sound];
+  }, []);
+
   useEffect(() => {
-    if (isPlayingIntroSong) {
-      playAudio(
-        camera,
-        '/car/audio/runaway-oakvale-of-albion-main-version-03-13-3073-timestrech.wav',
-      );
+    if (isPlayingIntroSong && soundObj) {
+      soundObj.play();
     }
-  }, [isPlayingIntroSong]);
+  }, [isPlayingIntroSong, soundObj]);
 
   return null;
 };

@@ -1,7 +1,7 @@
 export default {
   uniforms: {
     tDiffuse: { value: null },
-    tAdd: { value: null }
+    tAdd: { value: null },
   },
 
   vertexShader: `
@@ -19,5 +19,5 @@ export default {
         vec4 color = texture2D( tDiffuse, vUv );
         vec4 add = texture2D( tAdd, vUv );
         gl_FragColor = color + add;
-      }`
-}
+      }`,
+};
