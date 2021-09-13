@@ -73,7 +73,7 @@ export const UpdateZoomInCamera = ({ nodes: initialNodes }) => {
       // let endScaled = new THREE.Vector3(endCloned.x, endCloned.y, endCloned.z);
       // endScaled = endScaled.multiplyScalar(0.01);
 
-      // controlsRef.enabled = true;
+      controlsRef.enabled = true;
       // controlsRef.target = endScaled;
       setActiveObject(false);
       setActiveObjectName(null);
