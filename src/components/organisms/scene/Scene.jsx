@@ -13,8 +13,6 @@ import { UpdateCarColor } from 'components/utility/update-helpers/UpdateCarColor
 export const Scene = () => (
   <>
     <Controls />
-    {/* <color attach="background" args={["black"]} roughness={1.0} /> */}
-    <gridHelper args={[10, 10]} />
     <Suspense fallback={null}>
       <Background>
         {({ background }) => <UpdateBrightness background={background} />}

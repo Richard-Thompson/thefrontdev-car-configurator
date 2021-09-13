@@ -51,7 +51,7 @@ export const CanvasRoot = () => {
 
   return (
     <>
-      {progress !== 100 && <LoadingScreen />}
+      {progress <= 98 && <LoadingScreen>{`${progress.toFixed(0)} %`}</LoadingScreen>}
       <Canvas
         shadows
         gl={{ antialias: true }}

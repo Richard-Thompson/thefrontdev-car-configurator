@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+import * as THREE from 'three';
 
 export default {
   uniforms: {
@@ -8,7 +8,7 @@ export default {
     decay: { value: 0.95 },
     density: { value: 0.4 },
     weight: { value: 0.3 },
-    samples: { value: 50 }
+    samples: { value: 50 },
   },
 
   vertexShader: `
@@ -46,5 +46,5 @@ export default {
         }
         gl_FragColor = color * exposure;
       }
-    }`
-}
+    }`,
+};

@@ -75,12 +75,17 @@ export const CinematicHalfScreen = styled.div`
 
 export const LoadingScreen = styled.div`
     position: fixed;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     top: 0;
     bottom: 0;
     right: 0;
     left: 0;
-    z-index: 11;
-    font-size: 40px;
+    z-index: 12;
+    font-size: 30px;
+    color: rgba(22, 96.5, 7.8, 0.9);
 `;
 
 export const LoadingBar = styled.div`
