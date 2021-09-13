@@ -9,7 +9,7 @@ export const PlayAudio = () => {
   }));
   const { camera } = useThree();
 
-  const [soundObj] = useMemo(() => {
+  const [soundObj, listenerObj] = useMemo(() => {
     const listener = new THREE.AudioListener();
     camera.add(listener);
 
@@ -27,14 +27,17 @@ export const PlayAudio = () => {
         sound.setVolume(1.0);
       },
     );
-    return [sound];
+    return [sound, listener];
   }, []);
 
   useEffect(() => {
-    if (isPlayingIntroSong && soundObj) {
+    if (isPlayingIntroSong && soundObj && listenerObj) {
       soundObj.play();
+      const source = listenerObj.context.createBufferSource();
+      source.connect(listenerObj.context.destination);
+      source.start();
     }
-  }, [isPlayingIntroSong, soundObj]);
+  }, [isPlayingIntroSong, soundObj, listenerObj]);
 
   return null;
 };

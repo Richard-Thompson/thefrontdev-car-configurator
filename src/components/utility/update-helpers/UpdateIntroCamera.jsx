@@ -24,7 +24,6 @@ export const UpdateIntroCamera = ({
 
   useEffect(() => {
     if (startOfAnimation) {
-      console.log({ actions });
       const lookatAction = actions['Sphere.001Action.001'];
       const camPosAction = actions['SphereAction.001'];
       lookatAction.clampWhenFinished = true;
@@ -55,7 +54,6 @@ export const UpdateIntroCamera = ({
       if (controlsRef?.current) {
         controlsRef.current.update();
       }
-      console.log({ x: camera.position.x, y: camera.position.y, z: camera.position.z });
     }
   });
 
