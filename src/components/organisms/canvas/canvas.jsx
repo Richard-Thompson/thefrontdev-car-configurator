@@ -71,7 +71,7 @@ export const CanvasRoot = () => {
         </Suspense>
       </Canvas>
       <>
-        {progress >= 100 && (
+        {loaded >= 9 && (
           <Button
             fadeOut={personEntered}
             onClick={() => {
