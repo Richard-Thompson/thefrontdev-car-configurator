@@ -4,9 +4,9 @@ import * as THREE from 'three';
 import {
   Canvas,
   CinematicHalfScreen,
-  LoadingScreen,
   LoadingBar,
   Button,
+  LoadingScreen,
 } from 'components/organisms/canvas/canvas.styles';
 import { Overlay } from 'components/organisms/overlay/Overlay';
 import { useAnimationControls } from 'context/animationControls';
@@ -34,7 +34,7 @@ export const CanvasRoot = () => {
     setEndOfLoading: state.setEndOfLoading,
   }));
   const [personEntered, setPersonEntered] = useState(false);
-  const { progress } = useProgress();
+  const { progress, loaded } = useProgress();
 
   useEffect(() => {
     if (progress >= 100 && personEntered) {
@@ -51,7 +51,7 @@ export const CanvasRoot = () => {
 
   return (
     <>
-      {progress <= 98 && <LoadingScreen>{`${progress.toFixed(0)} %`}</LoadingScreen>}
+      {loaded < 9 && <LoadingScreen>{`${progress.toFixed(0)} %`}</LoadingScreen>}
       <Canvas
         shadows
         gl={{ antialias: true }}
