@@ -11,7 +11,7 @@ export const CarAudio = () => {
     <Suspense fallback={null}>
       <PositionalAudio
         key={1}
-        url="/car/audio/010567704-sfx-car-idling-1-ear.wav"
+        url="/car/audio/010567704-sfx-car-idling-1-ear.mp3"
         soundPlaying={soundOn}
       />
     </Suspense>

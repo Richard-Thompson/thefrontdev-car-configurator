@@ -19,7 +19,7 @@ export const PlayAudio = () => {
     // load a sound and set it as the Audio object's buffer
     const audioLoader = new THREE.AudioLoader();
     audioLoader.load(
-      '/car/audio/runaway-oakvale-of-albion-main-version-03-13-3073-timestrech.wav',
+      '/car/audio/runaway-oakvale-of-albion-main-version-03-13-3073-timestrech.mp3',
       (buffer) => {
         sound.setBuffer(buffer);
         // sound.
