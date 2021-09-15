@@ -23,7 +23,6 @@ export const PlayAudio = () => {
       (buffer) => {
         console.log('Loaded Audio');
         sound.setBuffer(buffer);
-        sound.setRefDistance(2000);
         // sound.
         sound.setLoop(false);
         sound.setVolume(4.0);
