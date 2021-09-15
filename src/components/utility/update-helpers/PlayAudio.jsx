@@ -21,10 +21,12 @@ export const PlayAudio = () => {
     audioLoader.load(
       '/car/audio/runaway-oakvale-of-albion-main-version-03-13-3073-timestrech.mp3',
       (buffer) => {
+        console.log('Loaded Audio');
         sound.setBuffer(buffer);
+        sound.setRefDistance(2000);
         // sound.
         sound.setLoop(false);
-        sound.setVolume(1.0);
+        sound.setVolume(4.0);
       },
     );
     return [sound, listener];
